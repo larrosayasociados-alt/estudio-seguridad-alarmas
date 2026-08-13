@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estudio de seguridad gratuito — Alarmas Lanzarote</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#090D12;
+    --panel:#121924;
+    --panel-alt:#1A2330;
+    --line:#25303D;
+    --cyan:#2BE1C9;
+    --amber:#FFB020;
+    --text:#EAF1F5;
+    --text-soft:#8CA0AF;
+    --danger:#FF5A5F;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    padding:0 0 60px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px;}
+
+  /* ---- Hero with radar signature ---- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:radial-gradient(circle at 50% 0%, #101A24 0%, #090D12 70%);
+    padding:36px 0 30px;
+    margin-bottom:18px;
+  }
+  .radar{
+    position:relative;
+    width:220px;height:220px;
+    margin:0 auto 6px;
+  }
+  .radar svg{width:100%;height:100%;display:block;}
+  .radar .ring{
+    fill:none;
+    stroke:var(--cyan);
+    opacity:0.35;
+  }
+  .radar .sweep{
+    transform-origin:110px 110px;
+    animation:spin 3.4s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .radar .blip{
+    fill:var(--amber);
+    animation:pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:.35; r:3; }
+    50%{ opacity:1; r:5; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .radar .sweep{animation:none;}
+    .radar .blip{animation:none;opacity:0.9;}
+  }
+  .hero-text{text-align:center;padding:0 20px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    margin:0 0 12px;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(28px,7vw,38px);
+    line-height:1.12;
+    margin:0 0 12px;
+    color:var(--text);
+  }
+  h1 .accent{color:var(--amber);}
+  .hero-sub{
+    font-size:16px;
+    color:var(--text-soft);
+    max-width:440px;
+    margin:0 auto;
+  }
+
+  /* ---- Trust bar ---- */
+  .trust-bar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin:22px 0 0;
+  }
+  .trust-badge{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:8px 14px;
+    font-size:12.5px;
+    color:var(--text-soft);
+  }
+  .trust-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);flex:0 0 auto;}
+
+  /* ---- Progress keypad ---- */
+  .keypad{
+    display:flex;
+    gap:6px;
+    margin:26px 0 18px;
+  }
+  .keypad .key{
+    flex:1;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.05em;
+    padding:8px 4px;
+    border-radius:7px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--text-soft);
+    transition:all .2s ease;
+  }
+  .keypad .key.done{
+    background:var(--cyan);
+    border-color:var(--cyan);
+    color:#04211C;
+    font-weight:600;
+  }
+
+  /* ---- Sections ---- */
+  section.sheet{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 20px;
+    margin-bottom:14px;
+  }
+  h2{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:19px;
+    margin:0 0 4px;
+    color:var(--text);
+  }
+  .hint{
+    font-size:13px;
+    color:var(--text-soft);
+    margin:0 0 16px;
+  }
+  label.field{display:block;margin-bottom:14px;}
+  label.field:last-child{margin-bottom:0;}
+  .field-label{
+    display:block;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--cyan);
+    margin-bottom:5px;
+    letter-spacing:.01em;
+  }
+  input[type=text], input[type=tel], input[type=email], textarea{
+    width:100%;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:15px;
+    padding:11px 12px;
+    border-radius:9px;
+    border:1.5px solid var(--line);
+    background:var(--panel-alt);
+    color:var(--text);
+    outline-offset:2px;
+  }
+  input::placeholder, textarea::placeholder{color:#5A6B7A;}
+  input:focus-visible, textarea:focus-visible, button:focus-visible, .tab-btn:focus-visible, .consent-box:focus-visible{
+    outline:2.5px solid var(--amber);
+  }
+  textarea{resize:vertical;min-height:70px;}
+
+  /* ---- Property type pills ---- */
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{
+    padding:10px 16px;
+    border-radius:999px;
+    border:1.5px solid var(--line);
+    background:var(--panel-alt);
+    font-size:13.5px;
+    cursor:pointer;
+    color:var(--text);
+    transition:all .12s ease;
+  }
+  .pill.checked{background:var(--cyan);border-color:var(--cyan);color:#04211C;font-weight:600;}
+  .pill input{position:absolute;opacity:0;pointer-events:none;}
+
+  /* ---- Consent checkbox ---- */
+  .consent-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    background:var(--panel-alt);
+    font-size:13.5px;
+    cursor:pointer;
+    color:var(--text);
+    transition:all .12s ease;
+  }
+  .consent-box.checked{background:rgba(43,225,201,0.08);border-color:var(--cyan);}
+  .consent-box input{position:absolute;opacity:0;pointer-events:none;}
+  .consent-box .check-visual{
+    flex:0 0 auto;
+    width:19px;height:19px;
+    border-radius:5px;
+    border:1.5px solid #4A5A69;
+    background:var(--panel);
+    position:relative;
+    transition:all .15s ease;
+  }
+  .consent-box.checked .check-visual{background:var(--cyan);border-color:var(--cyan);}
+  .consent-box.checked .check-visual::after{
+    content:"";
+    position:absolute;
+    left:5px;top:1px;
+    width:6px;height:11px;
+    border:solid #04211C;
+    border-width:0 2px 2px 0;
+    transform:rotate(40deg);
+  }
+
+  /* ---- Submit ---- */
+  .submit-btn{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:11px;
+    background:var(--amber);
+    color:#221400;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:16.5px;
+    cursor:pointer;
+    margin-top:6px;
+    transition:filter .15s ease;
+  }
+  .submit-btn:hover{filter:brightness(1.08);}
+  .submit-btn:disabled{opacity:.6;cursor:default;}
+  .error-msg{color:var(--danger);font-size:12.5px;margin-top:8px;display:none;}
+
+  /* ---- Confirmation ---- */
+  #summaryView{display:none;}
+  .stamp{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--cyan);
+    color:#04211C;
+    padding:9px 14px;
+    border-radius:9px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .stamp.err{background:var(--danger);color:#2A0505;}
+  .summary-block{
+    background:var(--panel-alt);
+    border:1.5px solid var(--line);
+    border-radius:10px;
+    padding:16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    white-space:pre-wrap;
+    color:var(--text-soft);
+    line-height:1.6;
+  }
+  .action-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+  .action-row button, .action-row a{
+    flex:1 1 140px;
+    text-align:center;
+    padding:12px 10px;
+    border-radius:9px;
+    font-size:13.5px;
+    font-weight:600;
+    text-decoration:none;
+    cursor:pointer;
+    border:1.5px solid var(--line);
+    background:var(--panel-alt);
+    color:var(--text);
+  }
+  .action-row a.mail{background:var(--cyan);border-color:var(--cyan);color:#04211C;}
+
+  footer{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:#48586a;
+    margin-top:24px;
+    letter-spacing:.04em;
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="radar">
+    <svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+      <circle class="ring" cx="110" cy="110" r="40"/>
+      <circle class="ring" cx="110" cy="110" r="74"/>
+      <circle class="ring" cx="110" cy="110" r="106"/>
+      <g class="sweep">
+        <path d="M110,110 L110,4 A106,106 0 0,1 185,35 Z" fill="url(#g)" opacity="0.55"/>
+      </g>
+      <defs>
+        <linearGradient id="g" x1="110" y1="4" x2="185" y2="110" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#2BE1C9" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#2BE1C9" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <circle class="blip" cx="150" cy="72" r="4"/>
+      <circle class="blip" cx="70" cy="140" r="4" style="animation-delay:.7s"/>
+      <circle class="blip" cx="140" cy="150" r="3.5" style="animation-delay:1.3s"/>
+      <circle cx="110" cy="110" r="5" fill="#EAF1F5"/>
+    </svg>
+  </div>
+  <div class="hero-text">
+    <p class="eyebrow">Estudio de seguridad gratuito a domicilio</p>
+    <h1>¿Sabes realmente <span class="accent">lo segura</span> que es tu puerta?</h1>
+    <p class="hero-sub">Un técnico revisa in situ los puntos vulnerables de tu casa o negocio y te asesora sin compromiso. Cobertura en toda España.</p>
+  </div>
+  <div class="trust-bar">
+    <span class="trust-badge"><span class="dot"></span>Cobertura nacional</span>
+    <span class="trust-badge"><span class="dot"></span>Visita sin compromiso</span>
+    <span class="trust-badge"><span class="dot"></span>Técnico certificado</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="keypad" id="keypad">
+    <span class="key" data-for="s1">01 · CONTACTO</span>
+    <span class="key" data-for="s2">02 · INMUEBLE</span>
+    <span class="key" data-for="s3">03 · CONFIRMAR</span>
+  </div>
+
+  <form id="alarmForm">
+
+    <section class="sheet" data-num="01" id="s1">
+      <h2>Tus datos de contacto</h2>
+      <p class="hint">Un técnico te llamará para concertar el día y la hora de la visita.</p>
+      <label class="field">
+        <span class="field-label">Nombre y apellidos</span>
+        <input type="text" name="nombre" required autocomplete="name">
+      </label>
+      <label class="field">
+        <span class="field-label">Teléfono</span>
+        <input type="tel" name="telefono" required autocomplete="tel" placeholder="Ej: 600 12 34 56">
+      </label>
+      <label class="field">
+        <span class="field-label">Email</span>
+        <input type="email" name="email" required autocomplete="email">
+      </label>
+    </section>
+
+    <section class="sheet" data-num="02" id="s2">
+      <h2>Sobre el inmueble</h2>
+      <p class="hint">Así el técnico llega preparado a la visita.</p>
+      <label class="field">
+        <span class="field-label">Ciudad / Provincia</span>
+        <input type="text" name="ciudad" required placeholder="Ej: Valencia">
+      </label>
+      <label class="field">
+        <span class="field-label">Tipo de inmueble</span>
+        <div class="pill-row" data-group="tipo">
+          <label class="pill"><input type="radio" name="tipo" value="Vivienda">Vivienda</label>
+          <label class="pill"><input type="radio" name="tipo" value="Comercio">Comercio</label>
+          <label class="pill"><input type="radio" name="tipo" value="Nave / Oficina">Nave / Oficina</label>
+        </div>
+      </label>
+      <label class="field">
+        <span class="field-label">¿Algo que el técnico deba saber? (opcional)</span>
+        <textarea name="comentario" placeholder="Ej: mejor llamar por la tarde, hay una tienda en la planta baja..."></textarea>
+      </label>
+    </section>
+
+    <section class="sheet" data-num="03" id="s3">
+      <h2>Confirmar solicitud</h2>
+      <label class="field">
+        <label class="consent-box" id="consentBox" tabindex="0">
+          <input type="checkbox" id="autorizaCheck" required>
+          <span class="check-visual"></span>
+          Autorizo a que un técnico me llame para concertar la visita de seguridad sin compromiso
+        </label>
+      </label>
+    </section>
+
+    <button type="submit" class="submit-btn" id="submitBtn">Solicitar visita gratuita</button>
+    <p class="error-msg" id="errorMsg">Faltan completar algunos campos obligatorios: nombre, teléfono, email, ciudad y la autorización de contacto.</p>
+  </form>
+
+  <div id="summaryView">
+    <div class="stamp" id="stampOk">✓ Solicitud recibida</div>
+    <div class="stamp err" id="stampErr" style="display:none;">⚠ No se pudo enviar automáticamente</div>
+    <p class="hint" id="okHint" style="margin-bottom:10px;">Un técnico te llamará en breve para concertar la visita.</p>
+    <p class="hint" id="errHint" style="display:none;margin-bottom:10px;">Prueba a tocar el botón de abajo para enviarlo por email, o copia el resumen.</p>
+    <p class="hint" id="errDetalle" style="display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--danger);"></p>
+    <div class="summary-block" id="summaryText"></div>
+    <div class="action-row">
+      <button type="button" id="copyBtn">Copiar resumen</button>
+      <a class="mail" id="mailLink" style="display:none;">Enviar por email</a>
+    </div>
+  </div>
+
+  <footer>ALARMAS LANZAROTE · ESTUDIO DE SEGURIDAD A DOMICILIO</footer>
+</div>
+
+<script>
+// ⚠️ CONFIGURACIÓN NECESARIA: reemplazá esta URL por la de tu formulario de Formspree
+// (te la da formspree.io después de crear el formulario con el email donde querés recibir los avisos)
+const FORM_ENDPOINT = "https://formspree.io/f/mbgryord";
+// Email de contacto que se usará como respaldo si el envío automático falla
+const FALLBACK_EMAIL = "info@alarmaslanzarote.es";
+
+// pills (tipo de inmueble)
+document.querySelectorAll('.pill-row').forEach(row=>{
+  row.querySelectorAll('.pill').forEach(pill=>{
+    const input = pill.querySelector('input');
+    input.addEventListener('change', ()=>{
+      row.querySelectorAll('.pill').forEach(p=>p.classList.toggle('checked', p.querySelector('input').checked));
+    });
+    pill.addEventListener('click', (e)=>{
+      if(e.target.tagName !== 'INPUT'){
+        e.preventDefault();
+        input.checked = true;
+        input.dispatchEvent(new Event('change', {bubbles:true}));
+      }
+    });
+  });
+});
+
+// consent checkbox
+const consentBox = document.getElementById('consentBox');
+const autorizaCheck = document.getElementById('autorizaCheck');
+autorizaCheck.addEventListener('change', ()=>{
+  consentBox.classList.toggle('checked', autorizaCheck.checked);
+});
+consentBox.addEventListener('click', (e)=>{
+  if(e.target.tagName !== 'INPUT'){
+    e.preventDefault();
+    autorizaCheck.checked = !autorizaCheck.checked;
+    autorizaCheck.dispatchEvent(new Event('change', {bubbles:true}));
+  }
+});
+consentBox.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter' || e.key === ' '){
+    e.preventDefault();
+    autorizaCheck.checked = !autorizaCheck.checked;
+    autorizaCheck.dispatchEvent(new Event('change', {bubbles:true}));
+  }
+});
+
+// keypad progress
+const sections = ['s1','s2','s3'];
+const keyEls = document.querySelectorAll('#keypad .key');
+function isFilled(id){
+  if(id==='s1'){
+    return document.querySelector('[name=nombre]').value.trim() &&
+           document.querySelector('[name=telefono]').value.trim() &&
+           document.querySelector('[name=email]').value.trim();
+  }
+  if(id==='s2'){
+    return document.querySelector('[name=ciudad]').value.trim();
+  }
+  if(id==='s3'){
+    return autorizaCheck.checked;
+  }
+}
+function refreshKeypad(){
+  sections.forEach((id,i)=>{
+    keyEls[i].classList.toggle('done', !!isFilled(id));
+  });
+}
+document.getElementById('alarmForm').addEventListener('input', refreshKeypad);
+document.getElementById('alarmForm').addEventListener('click', ()=>setTimeout(refreshKeypad,10));
+
+// submit
+document.getElementById('alarmForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const nombre = document.querySelector('[name=nombre]').value.trim();
+  const telefono = document.querySelector('[name=telefono]').value.trim();
+  const email = document.querySelector('[name=email]').value.trim();
+  const ciudad = document.querySelector('[name=ciudad]').value.trim();
+  const tipoInput = document.querySelector('[name=tipo]:checked');
+  const comentario = document.querySelector('[name=comentario]').value.trim();
+  const errorMsg = document.getElementById('errorMsg');
+
+  if(!nombre || !telefono || !email || !ciudad || !autorizaCheck.checked){
+    errorMsg.style.display = 'block';
+    return;
+  }
+  errorMsg.style.display = 'none';
+
+  let lines = [];
+  lines.push('SOLICITUD DE ESTUDIO DE SEGURIDAD');
+  lines.push('');
+  lines.push('Nombre: ' + nombre);
+  lines.push('Teléfono: ' + telefono);
+  lines.push('Email: ' + email);
+  lines.push('Ciudad/Provincia: ' + ciudad);
+  lines.push('Tipo de inmueble: ' + (tipoInput ? tipoInput.value : 'No indicado'));
+  if(comentario) { lines.push(''); lines.push('Comentario: ' + comentario); }
+
+  const summary = lines.join('\n');
+  document.getElementById('summaryText').textContent = summary;
+  document.getElementById('mailLink').href = 'mailto:' + FALLBACK_EMAIL + '?subject=' + encodeURIComponent('Solicitud de estudio de seguridad — ' + nombre) + '&body=' + encodeURIComponent(summary);
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Enviando…';
+
+  const fd = new FormData();
+  fd.append('nombre', nombre);
+  fd.append('telefono', telefono);
+  fd.append('email', email);
+  fd.append('ciudad', ciudad);
+  fd.append('tipo_inmueble', tipoInput ? tipoInput.value : 'No indicado');
+  fd.append('message', summary);
+  fd.append('_subject', 'Nueva solicitud de visita: ' + nombre + ' (' + ciudad + ')');
+
+  fetch(FORM_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: fd
+  })
+  .then(res => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Solicitar visita gratuita';
+    document.getElementById('alarmForm').style.display = 'none';
+    document.getElementById('summaryView').style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+    if(res.ok){
+      document.getElementById('stampOk').style.display = 'inline-flex';
+      document.getElementById('stampErr').style.display = 'none';
+      document.getElementById('okHint').style.display = 'block';
+      document.getElementById('errHint').style.display = 'none';
+      document.getElementById('mailLink').style.display = 'none';
+      document.getElementById('errDetalle').textContent = '';
+    } else {
+      res.text().then(txt => showError('HTTP ' + res.status + (txt ? ' — ' + txt.slice(0,200) : ''))).catch(()=>showError('HTTP ' + res.status));
+    }
+  })
+  .catch(err => {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Solicitar visita gratuita';
+    document.getElementById('alarmForm').style.display = 'none';
+    document.getElementById('summaryView').style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+    showError('Error de red — ' + (err && err.message ? err.message : err));
+  });
+});
+
+function showError(motivo){
+  document.getElementById('stampOk').style.display = 'none';
+  document.getElementById('stampErr').style.display = 'inline-flex';
+  document.getElementById('okHint').style.display = 'none';
+  document.getElementById('errHint').style.display = 'block';
+  document.getElementById('mailLink').style.display = 'inline-block';
+  document.getElementById('errDetalle').textContent = motivo || '';
+}
+
+document.getElementById('copyBtn').addEventListener('click', ()=>{
+  const text = document.getElementById('summaryText').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn = document.getElementById('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = '¡Copiado!';
+    setTimeout(()=>btn.textContent = original, 1600);
+  });
+});
+</script>
+</body>
+</html>
