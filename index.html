@@ -334,10 +334,10 @@
   <div class="hero-text">
     <p class="eyebrow">Estudio de seguridad gratuito a domicilio</p>
     <h1>¿Sabes realmente <span class="accent">lo segura</span> que es tu puerta?</h1>
-    <p class="hero-sub">Un técnico revisa in situ los puntos vulnerables de tu casa o negocio y te asesora sin compromiso. Cobertura en toda España.</p>
+    <p class="hero-sub">Un técnico revisa in situ los puntos vulnerables de tu casa o negocio y te asesora sin compromiso. Cobertura en Lanzarote.</p>
   </div>
   <div class="trust-bar">
-    <span class="trust-badge"><span class="dot"></span>Cobertura nacional</span>
+    <span class="trust-badge"><span class="dot"></span>Cobertura en Lanzarote</span>
     <span class="trust-badge"><span class="dot"></span>Visita sin compromiso</span>
     <span class="trust-badge"><span class="dot"></span>Técnico certificado</span>
   </div>
@@ -375,7 +375,7 @@
       <p class="hint">Así el técnico llega preparado a la visita.</p>
       <label class="field">
         <span class="field-label">Ciudad / Provincia</span>
-        <input type="text" name="ciudad" required placeholder="Ej: Valencia">
+        <input type="text" name="ciudad" required placeholder="Ej: Arrecife">
       </label>
       <label class="field">
         <span class="field-label">Tipo de inmueble</span>
@@ -403,7 +403,7 @@
     </section>
 
     <button type="submit" class="submit-btn" id="submitBtn">Solicitar visita gratuita</button>
-    <p class="error-msg" id="errorMsg">Faltan completar algunos campos obligatorios: nombre, teléfono, email, ciudad y la autorización de contacto.</p>
+    <p class="error-msg" id="errorMsg">Faltan completar algunos campos obligatorios: nombre, teléfono, email, ciudad, tipo de inmueble y la autorización de contacto.</p>
   </form>
 
   <div id="summaryView">
@@ -423,8 +423,8 @@
 </div>
 
 <script>
-// ⚠️ CONFIGURACIÓN NECESARIA: reemplazá esta URL por la de tu formulario de Formspree
-// (te la da formspree.io después de crear el formulario con el email donde querés recibir los avisos)
+// ⚠️ CONFIGURACIÓN NECESARIA: reemplaza esta URL por la de tu formulario de Formspree
+// (te la da formspree.io después de crear el formulario con el email donde quieres recibir los avisos)
 const FORM_ENDPOINT = "https://formspree.io/f/mbgryord";
 // Email de contacto que se usará como respaldo si el envío automático falla
 const FALLBACK_EMAIL = "info@alarmaslanzarote.es";
@@ -477,7 +477,8 @@ function isFilled(id){
            document.querySelector('[name=email]').value.trim();
   }
   if(id==='s2'){
-    return document.querySelector('[name=ciudad]').value.trim();
+    return document.querySelector('[name=ciudad]').value.trim() &&
+           !!document.querySelector('[name=tipo]:checked');
   }
   if(id==='s3'){
     return autorizaCheck.checked;
@@ -502,7 +503,7 @@ document.getElementById('alarmForm').addEventListener('submit', (e)=>{
   const comentario = document.querySelector('[name=comentario]').value.trim();
   const errorMsg = document.getElementById('errorMsg');
 
-  if(!nombre || !telefono || !email || !ciudad || !autorizaCheck.checked){
+  if(!nombre || !telefono || !email || !ciudad || !tipoInput || !autorizaCheck.checked){
     errorMsg.style.display = 'block';
     return;
   }
