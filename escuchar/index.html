@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Radio Nueva Moda · 99.5 y 100.4 FM · En directo</title>
+  <meta name="description" content="Escucha Radio Nueva Moda en directo, pide tu tema según el programa en antena y comparte en redes. Islas Canarias." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/larrosayasociados-alt/radio-nueva-moda-web@main/styles.css" />
+  <link rel="icon" href="https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top">
+        <img src="https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg" alt="Logo Radio Nueva Moda" />
+        <div>
+          <strong>Radio Nueva Moda</strong>
+          <small>99.5 · 100.4 FM · Canarias</small>
+        </div>
+      </a>
+      <nav>
+        <a href="#escuchar">Escuchar</a>
+        <a href="#pedir">Pedir tema</a>
+        <a href="#programacion">Programación</a>
+        <a href="#redes">Redes</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap" id="top">
+    <section class="hero" id="escuchar">
+      <div class="hero-copy">
+        <p class="kicker">En directo desde Canarias</p>
+        <h1>La radio que se escucha y se pide.</h1>
+        <p class="lead">Sintoniza el estudio, mira qué programa está al aire y manda tu tema o dedicatoria por WhatsApp.</p>
+        <div class="chips">
+          <span class="chip">Dirige Juan Carlos Torres</span>
+          <span class="chip">99.5 y 100.4 FM</span>
+          <span class="chip">WhatsApp cabina 625 39 17 79</span>
+        </div>
+      </div>
+      <aside class="player-card" id="playerCard">
+        <div class="now">
+          <img src="https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg" alt="" />
+          <div>
+            <div class="live"><i></i> EN VIVO</div>
+            <h2 id="progName">Cargando programa…</h2>
+            <p id="progMeta">Hora de Canarias</p>
+            <p id="clock" class="status"></p>
+          </div>
+        </div>
+        <div class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="controls">
+          <button class="play" type="button" data-play title="Reproducir">▶</button>
+          <input id="vol" class="vol" type="range" min="0" max="1" step="0.01" value="0.9" />
+        </div>
+        <p class="status" id="status">Pulsa play para conectar con el stream oficial.</p>
+        <audio id="stream" preload="none"></audio>
+      </aside>
+    </section>
+    <section class="grid-2" id="pedir">
+      <div class="card">
+        <h3>Pide tu tema</h3>
+        <p class="hint">Si hay cabina, el mensaje sale listo para WhatsApp.</p>
+        <div id="requestBanner" class="banner">Comprobando programación…</div>
+        <form class="form" id="requestForm">
+          <div class="row">
+            <label>Tu nombre<input name="name" required maxlength="60" placeholder="Cómo te anunciamos" /></label>
+            <label>Desde dónde<input name="place" maxlength="60" placeholder="Arrecife, Adeje, Las Palmas…" /></label>
+          </div>
+          <div class="row">
+            <label>Canción<input name="song" maxlength="80" placeholder="Título" /></label>
+            <label>Artista<input name="artist" maxlength="80" placeholder="Intérprete" /></label>
+          </div>
+          <label>Dedicatoria o recado al aire<textarea name="note" maxlength="240" placeholder="Para mi madre, un saludo al barrio…"></textarea></label>
+          <div class="actions">
+            <button class="btn btn-wa" id="sendWa" type="submit">Pedir tema por WhatsApp</button>
+            <button class="btn btn-ghost" id="sendShare" type="button">Compartir que estoy escuchando</button>
+          </div>
+        </form>
+        <h4 style="margin-top:22px">Tus últimas peticiones</h4>
+        <div class="queue" id="queue"></div>
+      </div>
+      <div class="card" id="redes">
+        <h3>Redes y cabina</h3>
+        <div class="social-grid">
+          <a class="social-btn" href="https://www.facebook.com/Radionuevamoda-995fm-102975932183862" target="_blank" rel="noopener"><div><b>Facebook</b><span>Página oficial 99.5 FM</span></div>↗</a>
+          <a class="social-btn" href="https://www.instagram.com/explore/tags/radionuevamoda/" target="_blank" rel="noopener"><div><b>Instagram</b><span>#RadioNuevaModa</span></div>↗</a>
+          <a class="social-btn" id="waSocial" href="https://wa.me/34625391779" target="_blank" rel="noopener"><div><b>WhatsApp cabina</b><span>625 39 17 79</span></div>↗</a>
+          <a class="social-btn" id="fbShare" href="https://www.facebook.com/sharer/sharer.php?u=https://larrosayasociados-alt.github.io/estudio-seguridad-alarmas/escuchar/" target="_blank" rel="noopener"><div><b>Compartir en Facebook</b><span>Dile a tu gente que estamos en directo</span></div>↗</a>
+        </div>
+        <label style="margin-top:16px">Texto para copiar o pegar en stories<textarea id="shareText" readonly></textarea></label>
+        <div class="actions"><button class="btn btn-ghost" id="copyShare" type="button">Copiar texto</button></div>
+        <div class="apps">
+          <a class="btn btn-gold" href="https://play.google.com/store/apps/details?id=radio.nuevamoda" target="_blank" rel="noopener">App Android</a>
+          <a class="btn btn-ghost" href="https://apps.apple.com/es/app/radio-nueva-moda/id6670175690" target="_blank" rel="noopener">App iOS</a>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="programacion">
+      <h2>Programación de hoy</h2>
+      <p class="hint">Hora de Canarias. El bloque marcado es el que está al aire ahora.</p>
+      <div class="sked" id="sked"></div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">© <span id="y"></span> Radio Nueva Moda · 99.5 y 100.4 FM · Islas Canarias<br />Director: Juan Carlos Torres · Stream oficial Integración Virtual</div>
+  </footer>
+  <div class="dock">
+    <div class="wrap dock-inner">
+      <img src="https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg" alt="" />
+      <div><strong>Radio Nueva Moda</strong><div class="status" id="dockLabel">En directo</div></div>
+      <button type="button" data-play="dock">Escuchar</button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/gh/larrosayasociados-alt/radio-nueva-moda-web@main/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/larrosayasociados-alt/radio-nueva-moda-web@main/app.js"></script>
+  <script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+</body>
+</html>
