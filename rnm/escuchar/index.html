@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Radio Nueva Moda · 99.5 y 100.4 FM · En directo</title>
+  <meta name="description" content="Escucha Radio Nueva Moda en directo, pide tu tema según el programa en antena y comparte en redes. Islas Canarias." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --navy: #071428;
+  --navy-2: #0c1f3d;
+  --ink: #0a1628;
+  --gold: #f4c430;
+  --gold-2: #ffd56a;
+  --cream: #f6efe0;
+  --muted: #9bb0c9;
+  --line: rgba(244, 196, 48, 0.22);
+  --glass: rgba(8, 22, 44, 0.72);
+  --ok: #3ddc97;
+  --warn: #ff8a5b;
+  --radius: 22px;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(244, 196, 48, 0.16), transparent 55%),
+    radial-gradient(900px 500px at -10% 20%, rgba(61, 90, 128, 0.35), transparent 50%),
+    linear-gradient(180deg, #06101f 0%, #0a1a33 50%, #071428 100%);
+  color: var(--cream);
+  min-height: 100vh;
+  padding-bottom: 108px;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button, input, textarea, select { font: inherit; }
+
+.wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  backdrop-filter: blur(16px);
+  background: rgba(7, 20, 40, 0.78);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 12px 0;
+}
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand img {
+  width: 48px; height: 68px; object-fit: cover; border-radius: 14px;
+  box-shadow: 0 0 0 1px var(--line);
+}
+.brand strong { display: block; letter-spacing: 0.04em; }
+.brand small { color: var(--muted); font-size: 12px; }
+
+nav { display: flex; gap: 8px; flex-wrap: wrap; }
+nav a {
+  text-decoration: none; color: var(--muted);
+  padding: 8px 12px; border-radius: 999px; font-size: 14px;
+}
+nav a:hover { color: var(--gold); background: rgba(244, 196, 48, 0.08); }
+
+.hero {
+  padding: 48px 0 28px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.hero-copy h1 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 0.95;
+  margin: 10px 0 16px;
+}
+.kicker {
+  color: var(--gold); letter-spacing: 0.18em;
+  text-transform: uppercase; font-size: 12px; font-weight: 700;
+}
+.lead { color: var(--muted); max-width: 46ch; font-size: 17px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.chip {
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 7px 12px; font-size: 13px; color: var(--cream);
+  background: rgba(255,255,255,0.03);
+}
+
+.player-card, .card {
+  background: linear-gradient(180deg, rgba(18, 38, 68, 0.9), rgba(8, 20, 40, 0.92));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.player-card { padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+.now {
+  display: grid; grid-template-columns: 86px 1fr; gap: 14px; align-items: center;
+}
+.now img {
+  width: 86px; height: 120px; object-fit: cover; border-radius: 18px;
+}
+.live {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--ok); font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+}
+.live i {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--ok);
+  box-shadow: 0 0 0 6px rgba(61, 220, 151, 0.15);
+  animation: pulse 1.6s infinite;
+}
+@keyframes pulse {
+  50% { box-shadow: 0 0 0 10px rgba(61, 220, 151, 0); }
+}
+.now h2 { font-size: 22px; line-height: 1.15; }
+.now p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+.eq {
+  height: 42px; display: flex; align-items: flex-end; gap: 4px;
+}
+.eq span {
+  width: 5px; background: var(--gold); border-radius: 4px 4px 0 0;
+  height: 8px; opacity: 0.35;
+}
+.player-card.is-on .eq span {
+  animation: bar 0.9s ease-in-out infinite;
+  opacity: 1;
+}
+.eq span:nth-child(1) { animation-delay: 0s; }
+.eq span:nth-child(2) { animation-delay: .1s; }
+.eq span:nth-child(3) { animation-delay: .2s; }
+.eq span:nth-child(4) { animation-delay: .05s; }
+.eq span:nth-child(5) { animation-delay: .25s; }
+.eq span:nth-child(6) { animation-delay: .15s; }
+.eq span:nth-child(7) { animation-delay: .3s; }
+@keyframes bar {
+  0%,100% { height: 8px; }
+  50% { height: 38px; }
+}
+
+.controls { display: flex; align-items: center; gap: 12px; }
+.play {
+  width: 64px; height: 64px; border: 0; border-radius: 50%;
+  background: var(--gold); color: #1a1400; cursor: pointer;
+  font-size: 22px; font-weight: 800;
+  box-shadow: 0 10px 24px rgba(244, 196, 48, 0.28);
+}
+.play:hover { transform: translateY(-1px); }
+.vol { flex: 1; accent-color: var(--gold); }
+.status { font-size: 13px; color: var(--muted); }
+
+.grid-2 {
+  display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 22px; margin: 10px 0 40px;
+}
+.card { padding: 24px; }
+.card h3 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 28px; margin-bottom: 8px;
+}
+.hint { color: var(--muted); margin-bottom: 18px; }
+
+.form { display: grid; gap: 12px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+label { display: grid; gap: 6px; font-size: 13px; color: var(--muted); }
+input, textarea, select {
+  width: 100%; border-radius: 14px; border: 1px solid var(--line);
+  background: rgba(255,255,255,0.04); color: var(--cream);
+  padding: 12px 14px; outline: none;
+}
+textarea { min-height: 88px; resize: vertical; }
+input:focus, textarea:focus { border-color: var(--gold); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.btn {
+  border: 0; border-radius: 999px; padding: 12px 16px; cursor: pointer;
+  font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-gold { background: var(--gold); color: #1a1400; }
+.btn-ghost {
+  background: transparent; color: var(--cream);
+  border: 1px solid var(--line);
+}
+.btn-wa { background: #25d366; color: #06210f; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.banner {
+  border-radius: 16px; padding: 12px 14px; font-size: 14px;
+  background: rgba(244, 196, 48, 0.1); border: 1px solid var(--line);
+}
+.banner.off { background: rgba(255, 138, 91, 0.12); color: #ffd2c0; }
+
+.queue { display: grid; gap: 8px; margin-top: 16px; }
+.q-item {
+  display: flex; justify-content: space-between; gap: 10px;
+  padding: 10px 12px; border-radius: 14px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
+}
+.q-item small { color: var(--muted); }
+
+.social-grid { display: grid; gap: 10px; }
+.social-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-radius: 16px;
+  border: 1px solid var(--line); text-decoration: none;
+  background: rgba(255,255,255,0.03);
+}
+.social-btn:hover { border-color: var(--gold); }
+.social-btn b { display: block; }
+.social-btn span { color: var(--muted); font-size: 13px; }
+
+.section { padding: 10px 0 36px; }
+.section h2 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 34px; margin-bottom: 8px;
+}
+
+.sked {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;
+}
+.sked article {
+  padding: 16px; border-radius: 18px; border: 1px solid var(--line);
+  background: rgba(8, 20, 40, 0.55);
+}
+.sked article.on { outline: 2px solid var(--gold); }
+.sked time { color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 0.06em; }
+.sked h4 { margin: 6px 0 4px; }
+.sked p { color: var(--muted); font-size: 13px; }
+
+.apps { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 28px 0 20px; color: var(--muted); font-size: 14px;
+}
+.dock {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  background: rgba(6, 14, 28, 0.92);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--line);
+}
+.dock-inner {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+}
+.dock img { width: 34px; height: 48px; object-fit: cover; border-radius: 8px; }
+.dock button {
+  margin-left: auto; border: 0; border-radius: 999px;
+  background: var(--gold); color: #1a1400; font-weight: 800;
+  padding: 10px 16px; cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .hero, .grid-2, .sked, .row { grid-template-columns: 1fr; }
+  nav { display: none; }
+  .brand img { width: 36px; height: 52px; }
+}
+
+</style>
+  <link rel="icon" href="https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top">
+        <img src="https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg" alt="Logo Radio Nueva Moda" />
+        <div>
+          <strong>Radio Nueva Moda</strong>
+          <small>99.5 · 100.4 FM · Canarias</small>
+        </div>
+      </a>
+      <nav>
+        <a href="#escuchar">Escuchar</a>
+        <a href="#pedir">Pedir tema</a>
+        <a href="#programacion">Programación</a>
+        <a href="#redes">Redes</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="top">
+    <section class="hero" id="escuchar">
+      <div class="hero-copy">
+        <p class="kicker">En directo desde Canarias</p>
+        <h1>La radio que se escucha y se pide.</h1>
+        <p class="lead">
+          Sintoniza el estudio, mira qué programa está al aire y manda tu tema o
+          dedicatoria por WhatsApp. Si el tramo no admite peticiones, te lo dice
+          antes de enviar.
+        </p>
+        <div class="chips">
+          <span class="chip">Dirige Juan Carlos Torres</span>
+          <span class="chip">99.5 y 100.4 FM</span>
+          <span class="chip">WhatsApp cabina 625 39 17 79</span>
+        </div>
+      </div>
+
+      <aside class="player-card" id="playerCard">
+        <div class="now">
+          <img src="https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg" alt="" />
+          <div>
+            <div class="live"><i></i> EN VIVO</div>
+            <h2 id="progName">Cargando programa…</h2>
+            <p id="progMeta">Hora de Canarias</p>
+            <p id="clock" class="status"></p>
+          </div>
+        </div>
+        <div class="eq" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="controls">
+          <button class="play" type="button" data-play title="Reproducir">▶</button>
+          <input id="vol" class="vol" type="range" min="0" max="1" step="0.01" value="0.9" />
+        </div>
+        <p class="status" id="status">Pulsa play para conectar con el stream oficial.</p>
+        <audio id="stream" preload="none"></audio>
+      </aside>
+    </section>
+
+    <section class="grid-2" id="pedir">
+      <div class="card">
+        <h3>Pide tu tema</h3>
+        <p class="hint">
+          El formulario lee el programa en curso. Si hay cabina, el mensaje sale
+          listo para WhatsApp. Si es música continua, se envía como saludo para el siguiente bloque.
+        </p>
+        <div id="requestBanner" class="banner">Comprobando programación…</div>
+        <form class="form" id="requestForm">
+          <div class="row">
+            <label>Tu nombre
+              <input name="name" required maxlength="60" placeholder="Cómo te anunciamos" />
+            </label>
+            <label>Desde dónde
+              <input name="place" maxlength="60" placeholder="Arrecife, Adeje, Las Palmas…" />
+            </label>
+          </div>
+          <div class="row">
+            <label>Canción
+              <input name="song" maxlength="80" placeholder="Título" />
+            </label>
+            <label>Artista
+              <input name="artist" maxlength="80" placeholder="Intérprete" />
+            </label>
+          </div>
+          <label>Dedicatoria o recado al aire
+            <textarea name="note" maxlength="240" placeholder="Para mi madre, para el taller, un saludo al barrio…"></textarea>
+          </label>
+          <div class="actions">
+            <button class="btn btn-wa" id="sendWa" type="submit">Pedir tema por WhatsApp</button>
+            <button class="btn btn-ghost" id="sendShare" type="button">Compartir que estoy escuchando</button>
+          </div>
+        </form>
+        <h4 style="margin-top:22px">Tus últimas peticiones</h4>
+        <div class="queue" id="queue"></div>
+      </div>
+
+      <div class="card" id="redes">
+        <h3>Redes y cabina</h3>
+        <p class="hint">La interacción sale de la web y aterriza donde la radio ya responde: WhatsApp, Facebook y la app.</p>
+        <div class="social-grid">
+          <a class="social-btn" href="https://www.facebook.com/Radionuevamoda-995fm-102975932183862" target="_blank" rel="noopener">
+            <div><b>Facebook</b><span>Página oficial 99.5 FM</span></div>↗
+          </a>
+          <a class="social-btn" href="https://www.instagram.com/explore/tags/juancarlostorresbahamon/" target="_blank" rel="noopener">
+            <div><b>Instagram</b><span>Juan Carlos Torres Bahamon</span></div>↗
+          </a>
+          <a class="social-btn" id="waSocial" href="#" target="_blank" rel="noopener">
+            <div><b>WhatsApp cabina</b><span>625 39 17 79</span></div>↗
+          </a>
+          <a class="social-btn" id="fbShare" href="#" target="_blank" rel="noopener">
+            <div><b>Compartir en Facebook</b><span>Dile a tu gente que estamos en directo</span></div>↗
+          </a>
+        </div>
+        <label style="margin-top:16px">Texto para copiar o pegar en stories
+          <textarea id="shareText" readonly></textarea>
+        </label>
+        <div class="actions">
+          <button class="btn btn-ghost" id="copyShare" type="button">Copiar texto</button>
+        </div>
+        <div class="apps">
+          <a class="btn btn-gold" href="https://play.google.com/store/apps/details?id=radio.nuevamoda" target="_blank" rel="noopener">App Android</a>
+          <a class="btn btn-ghost" href="https://apps.apple.com/es/app/radio-nueva-moda/id6670175690" target="_blank" rel="noopener">App iOS</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="programacion">
+      <h2>Programación de hoy</h2>
+      <p class="hint">Hora de Canarias. El bloque marcado es el que está al aire ahora. Se edita en <code>config.js</code>.</p>
+      <div class="sked" id="sked"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      © <span id="y"></span> Radio Nueva Moda · 99.5 y 100.4 FM · Islas Canarias<br />
+      Director: Juan Carlos Torres · Stream oficial Integración Virtual
+    </div>
+  </footer>
+
+  <div class="dock">
+    <div class="wrap dock-inner">
+      <img src="https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg" alt="" />
+      <div>
+        <strong>Radio Nueva Moda</strong>
+        <div class="status" id="dockLabel">En directo</div>
+      </div>
+      <button type="button" data-play="dock">Escuchar</button>
+    </div>
+  </div>
+
+  <script>
+/* ============================================================
+   Radio Nueva Moda — configuración editable
+   Cambia horarios, WhatsApp y redes sin tocar el resto.
+   Horarios en hora de Canarias (Atlantic/Canary).
+   ============================================================ */
+window.RNM = {
+  name: "Radio Nueva Moda",
+  slogan: "La mejor música · Conectamos con el corazón",
+  director: "Juan Carlos Torres",
+  frequencies: "99.5 · 100.4 FM",
+  location: "Islas Canarias, España",
+  timezone: "Atlantic/Canary",
+  stream: "https://stream.integracionvirtual.com/proxy/radionuevamoda?mp=/stream",
+  logo: "https://vibe.filesafe.space/1785258839741630781/attachments/e2f37555-1d48-4718-94f8-2aeb9be0da0d.jpg",
+  site: "https://radionuevamoda.com",
+  phoneDisplay: "625 39 17 79",
+  whatsapp: "34625391779",
+  email: "",
+  apps: {
+    android: "https://play.google.com/store/apps/details?id=radio.nuevamoda",
+    ios: "https://apps.apple.com/es/app/radio-nueva-moda/id6670175690",
+  },
+  social: {
+    facebook: "https://www.facebook.com/Radionuevamoda-995fm-102975932183862",
+    instagram: "https://www.instagram.com/explore/tags/juancarlostorresbahamon/",
+    instagramHandle: "@RadioNuevaModa",
+    tiktok: "",
+    youtube: "",
+    x: "",
+  },
+  /* days: 0 domingo … 6 sábado. start/end en minutos desde 00:00 */
+  schedule: [
+    {
+      id: "madrugada",
+      name: "Madrugada Nueva Moda",
+      host: "Selección automática",
+      desc: "Éxitos suaves para acompañar la noche.",
+      days: [0, 1, 2, 3, 4, 5, 6],
+      start: 0,
+      end: 390,
+      requests: false,
+      color: "#3d5a80",
+    },
+    {
+      id: "despierta",
+      name: "Despierta Nueva Moda",
+      host: "Juan Carlos Torres",
+      desc: "El arranque del día. Dedicatorias, saludos y la música que despierta Canarias.",
+      days: [1, 2, 3, 4, 5],
+      start: 390,
+      end: 600,
+      requests: true,
+      color: "#f4c430",
+    },
+    {
+      id: "media-manana",
+      name: "Media mañana",
+      host: "Cabina en directo",
+      desc: "Temas pedidos, rumba, salsa y lo que está sonando.",
+      days: [1, 2, 3, 4, 5],
+      start: 600,
+      end: 840,
+      requests: true,
+      color: "#f0a202",
+    },
+    {
+      id: "tarde-latina",
+      name: "Tarde latina",
+      host: "Cabina en directo",
+      desc: "Bachata, merengue, salsa y tropical. Pide tu tema.",
+      days: [1, 2, 3, 4, 5],
+      start: 840,
+      end: 1080,
+      requests: true,
+      color: "#e07a5f",
+    },
+    {
+      id: "drive",
+      name: "Hora punta",
+      host: "Cabina en directo",
+      desc: "El regreso a casa con éxitos y dedicaciones.",
+      days: [1, 2, 3, 4, 5],
+      start: 1080,
+      end: 1260,
+      requests: true,
+      color: "#81b29a",
+    },
+    {
+      id: "noche",
+      name: "Noche de corazones",
+      host: "Selección + cabina",
+      desc: "Boleros, baladas y mensajes al aire.",
+      days: [1, 2, 3, 4, 5],
+      start: 1260,
+      end: 1440,
+      requests: true,
+      color: "#9b5de5",
+    },
+    {
+      id: "finde-manana",
+      name: "Sábado / domingo de moda",
+      host: "Cabina fin de semana",
+      desc: "Fiesta, rumba y peticiones todo el día.",
+      days: [0, 6],
+      start: 390,
+      end: 1260,
+      requests: true,
+      color: "#00bbf9",
+    },
+    {
+      id: "finde-noche",
+      name: "Noche de fin de semana",
+      host: "Selección especial",
+      desc: "La fiesta no para.",
+      days: [0, 6],
+      start: 1260,
+      end: 1440,
+      requests: true,
+      color: "#f15bb5",
+    },
+  ],
+};
+
+(function () {
+  const C = window.RNM;
+  const audio = document.getElementById("stream");
+  const playBtns = document.querySelectorAll("[data-play]");
+  const playerCard = document.getElementById("playerCard");
+  const vol = document.getElementById("vol");
+  const statusEl = document.getElementById("status");
+  const clockEl = document.getElementById("clock");
+  const progName = document.getElementById("progName");
+  const progMeta = document.getElementById("progMeta");
+  const dockLabel = document.getElementById("dockLabel");
+  const requestForm = document.getElementById("requestForm");
+  const requestBanner = document.getElementById("requestBanner");
+  const sendWa = document.getElementById("sendWa");
+  const sendShare = document.getElementById("sendShare");
+  const queueEl = document.getElementById("queue");
+  const skedEl = document.getElementById("sked");
+  const shareText = document.getElementById("shareText");
+
+  let playing = false;
+  let current = null;
+
+  function nowCanary() {
+    const fmt = new Intl.DateTimeFormat("es-ES", {
+      timeZone: C.timezone,
+      hour: "2-digit",
+      minute: "2-digit",
+      weekday: "short",
+      hour12: false,
+    });
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat("en-GB", {
+        timeZone: C.timezone,
+        hour: "numeric",
+        minute: "numeric",
+        weekday: "short",
+        hour12: false,
+        hourCycle: "h23",
+      })
+        .formatToParts(new Date())
+        .map((p) => [p.type, p.value])
+    );
+    const map = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    const day = map[parts.weekday] ?? new Date().getDay();
+    const minutes = Number(parts.hour) * 60 + Number(parts.minute);
+    return { day, minutes, label: fmt.format(new Date()) };
+  }
+
+  function findProgram(t) {
+    return (
+      C.schedule.find(
+        (p) => p.days.includes(t.day) && t.minutes >= p.start && t.minutes < p.end
+      ) || C.schedule[0]
+    );
+  }
+
+  function hhmm(mins) {
+    const h = String(Math.floor(mins / 60) % 24).padStart(2, "0");
+    const m = String(mins % 60).padStart(2, "0");
+    return `${h}:${m}`;
+  }
+
+  function setPlaying(on) {
+    playing = on;
+    playerCard.classList.toggle("is-on", on);
+    playBtns.forEach((b) => {
+      b.textContent = on ? "❚❚" : "▶";
+      if (b.dataset.play === "dock") b.textContent = on ? "Pausa" : "Escuchar";
+    });
+    statusEl.textContent = on ? "En directo · conectado al estudio" : "Listo para sintonizar";
+  }
+
+  async function toggle() {
+    if (playing) {
+      audio.pause();
+      setPlaying(false);
+      return;
+    }
+    statusEl.textContent = "Conectando con el estudio…";
+    try {
+      if (!audio.src) audio.src = C.stream;
+      await audio.play();
+      setPlaying(true);
+      if (navigator.mediaSession) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: current ? current.name : C.name,
+          artist: C.name,
+          album: C.frequencies,
+        });
+      }
+    } catch (err) {
+      statusEl.textContent = "No se pudo iniciar el audio. Pulsa de nuevo o abre la app.";
+      setPlaying(false);
+    }
+  }
+
+  function buildShare(extra) {
+    const p = current;
+    return [
+      `Estoy escuchando ${C.name} ${C.frequencies}`,
+      p ? `Ahora: ${p.name} con ${p.host}` : "",
+      extra || "",
+      C.site,
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  function waLink(text) {
+    return `https://wa.me/${C.whatsapp}?text=${encodeURIComponent(text)}`;
+  }
+
+  function saveRequest(item) {
+    const key = "rnm-requests";
+    const list = JSON.parse(localStorage.getItem(key) || "[]");
+    list.unshift(item);
+    localStorage.setItem(key, JSON.stringify(list.slice(0, 12)));
+    renderQueue();
+  }
+
+  function renderQueue() {
+    const list = JSON.parse(localStorage.getItem("rnm-requests") || "[]");
+    if (!list.length) {
+      queueEl.innerHTML = '<p class="hint">Aún no has enviado peticiones en este dispositivo.</p>';
+      return;
+    }
+    queueEl.innerHTML = list
+      .map(
+        (r) =>
+          `<div class="q-item"><div><b>${r.song}</b> — ${r.artist}<br><small>${r.name} · ${r.program}</small></div><small>${r.when}</small></div>`
+      )
+      .join("");
+  }
+
+  function refreshProgram() {
+    const t = nowCanary();
+    current = findProgram(t);
+    clockEl.textContent = t.label + " · Canarias";
+    progName.textContent = current.name;
+    progMeta.textContent = `${current.host} · ${hhmm(current.start)}–${hhmm(current.end)} · ${
+      current.requests ? "Se aceptan peticiones" : "Sin peticiones en antena"
+    }`;
+    dockLabel.textContent = `${current.name} · ${C.frequencies}`;
+    shareText.value = buildShare("Únete al directo.");
+
+    const open = !!current.requests;
+    requestBanner.className = "banner" + (open ? "" : " off");
+    requestBanner.textContent = open
+      ? `Ahora mismo está ${current.name}. Tu petición llega al WhatsApp de cabina con el nombre del programa.`
+      : `Ahora mismo está ${current.name}. Este tramo no admite temas en directo. Puedes dejar un saludo y lo leemos en el siguiente programa.`;
+    [...requestForm.querySelectorAll("input,textarea,button")].forEach((el) => {
+      if (el.id === "sendShare") return;
+      if (el.type === "button" && el.id !== "sendWa") return;
+    });
+    sendWa.disabled = false;
+    sendWa.textContent = open ? "Pedir tema por WhatsApp" : "Enviar saludo por WhatsApp";
+  }
+
+  function renderSchedule() {
+    const t = nowCanary();
+    const today = C.schedule.filter((p) => p.days.includes(t.day));
+    skedEl.innerHTML = today
+      .map((p) => {
+        const on = current && p.id === current.id;
+        return `<article class="${on ? "on" : ""}">
+          <time>${hhmm(p.start)} – ${hhmm(p.end)}</time>
+          <h4>${p.name}</h4>
+          <p>${p.host}</p>
+          <p>${p.desc}</p>
+          <p>${p.requests ? "Peticiones abiertas" : "Música continua"}</p>
+        </article>`;
+      })
+      .join("");
+  }
+
+  playBtns.forEach((b) => b.addEventListener("click", toggle));
+  audio.addEventListener("playing", () => setPlaying(true));
+  audio.addEventListener("pause", () => setPlaying(false));
+  audio.addEventListener("error", () => {
+    statusEl.textContent = "El stream no respondió. Reintenta en unos segundos.";
+    setPlaying(false);
+  });
+  vol.addEventListener("input", () => {
+    audio.volume = Number(vol.value);
+  });
+  audio.volume = Number(vol.value);
+
+  requestForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(requestForm).entries());
+    const open = current && current.requests;
+    const msg = [
+      `Hola Radio Nueva Moda 💛`,
+      `Programa: ${current ? current.name : "en directo"}`,
+      `Soy ${data.name || "un oyente"} desde ${data.place || "Canarias"}.`,
+      data.song ? `Quiero pedir: ${data.song}${data.artist ? " — " + data.artist : ""}` : "Les dejo un saludo.",
+      data.note ? `Dedicatoria: ${data.note}` : "",
+      open ? "¿Me la pueden poner en antena?" : "Si no entra ahora, para el siguiente programa.",
+    ]
+      .filter(Boolean)
+      .join("\n");
+    saveRequest({
+      name: data.name || "Oyente",
+      song: data.song || "Saludo",
+      artist: data.artist || "—",
+      program: current ? current.name : "Directo",
+      when: nowCanary().label,
+    });
+    window.open(waLink(msg), "_blank", "noopener");
+  });
+
+  sendShare.addEventListener("click", async () => {
+    const text = buildShare(
+      current && current.requests
+        ? "Estoy pidiendo un tema. ¿Te unes?"
+        : "Sintonízala conmigo."
+    );
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: C.name, text, url: C.site });
+        return;
+      } catch (_) {}
+    }
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(text)}`,
+      "_blank",
+      "noopener"
+    );
+  });
+
+  document.getElementById("copyShare").addEventListener("click", async () => {
+    shareText.select();
+    try {
+      await navigator.clipboard.writeText(shareText.value);
+      document.getElementById("copyShare").textContent = "Copiado";
+      setTimeout(() => (document.getElementById("copyShare").textContent = "Copiar texto"), 1500);
+    } catch (_) {}
+  });
+
+  document.getElementById("fbShare").href =
+    "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(C.site);
+  document.getElementById("waSocial").href = waLink(
+    `Hola ${C.name}, les escribo desde la web.`
+  );
+
+  refreshProgram();
+  renderSchedule();
+  renderQueue();
+  setInterval(() => {
+    refreshProgram();
+    renderSchedule();
+  }, 30000);
+})();
+
+</script>
+  <script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+</body>
+</html>
