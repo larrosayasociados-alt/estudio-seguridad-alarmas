@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Facturas · Radio Nueva Moda</title>
+  <meta name="description" content="Generador de facturas de Radio Nueva Moda" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --navy: #0b1f4a;
+      --navy-2: #16315c;
+      --gold: #f0b429;
+      --gold-2: #f7d48a;
+      --ink: #1a2332;
+      --muted: #5b6575;
+      --line: #d8dee8;
+      --bg: #eef3fa;
+      --card: #ffffff;
+      --ok: #1b7a4e;
+      --danger: #b42318;
+      --wa: #128c7e;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: linear-gradient(180deg, #dce6f5 0%, #eef3fa 220px);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    .top {
+      background: var(--navy);
+      color: #fff;
+      border-bottom: 4px solid var(--gold);
+    }
+    .top-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 20px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-mark {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #fff; display: grid; place-items: center; flex-shrink: 0;
+      overflow: hidden;
+    }
+    .brand-mark img { width: 46px; height: 46px; object-fit: contain; }
+    .brand h1 { margin: 0; font-size: 20px; letter-spacing: .02em; }
+    .brand p { margin: 2px 0 0; color: var(--gold-2); font-size: 13px; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 22px 20px 60px; }
+    .grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; }
+    @media (max-width: 920px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card);
+      border: 1px solid #e3eaf3;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(11,31,74,.06);
+      padding: 18px;
+    }
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--navy);
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    @media (max-width: 640px) {
+      .row, .row3 { grid-template-columns: 1fr; }
+    }
+    label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--ink);
+      background: #fff;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: 2px solid #f0b42966;
+      border-color: var(--gold);
+    }
+    textarea { min-height: 72px; resize: vertical; }
+    .field { margin-bottom: 12px; }
+    .hint { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+    .num-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--navy); color: #fff; border-radius: 999px;
+      padding: 6px 12px; font-weight: 700;
+    }
+    .num-badge span { color: var(--gold); }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    button, .btn {
+      appearance: none; border: 0; cursor: pointer;
+      border-radius: 11px; padding: 11px 14px; font: inherit; font-weight: 700;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary { background: var(--navy); color: #fff; }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-wa { background: var(--wa); color: #fff; }
+    .btn-mail { background: #1d4ed8; color: #fff; }
+    .btn-ghost { background: #eef3fa; color: var(--navy); }
+    .btn-danger { background: #fde8e6; color: var(--danger); }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; font-size: 11px; color: var(--muted); padding: 6px 4px; border-bottom: 1px solid var(--line); }
+    td { padding: 6px 4px; vertical-align: top; }
+    .item-row input { padding: 8px; }
+    .totals { margin-top: 10px; background: var(--bg); border-radius: 12px; padding: 12px; }
+    .totals div { display: flex; justify-content: space-between; margin: 4px 0; }
+    .totals .grand { font-size: 18px; font-weight: 700; color: var(--navy); border-top: 1px solid var(--line); padding-top: 8px; margin-top: 8px; }
+    .hist { max-height: 280px; overflow: auto; }
+    .hist-item {
+      display: grid; grid-template-columns: 52px 1fr auto; gap: 8px;
+      padding: 10px 0; border-bottom: 1px solid var(--line); align-items: center;
+    }
+    .hist-item b { color: var(--navy); }
+    .hist-item small { color: var(--muted); display: block; }
+    .toast {
+      position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+      background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 999px;
+      display: none; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    }
+    .section-gap { height: 14px; }
+    .send-box { background: #f7fafc; border: 1px dashed #c9d4e4; border-radius: 12px; padding: 12px; margin-top: 10px; }
+    .pill { font-size: 11px; background: #e8eef8; color: var(--navy); padding: 2px 8px; border-radius: 999px; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand-mark"><img id="logoImg" alt="Radio Nueva Moda" /></div>
+      <div class="brand">
+        <h1>Radio Nueva Moda</h1>
+        <p>Facturas · 100.4 FM · 99.5 FM</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <section class="card">
+        <h2>Nueva factura</h2>
+        <p class="hint">El número se asigna solo y no se reutiliza. Los datos se guardan en este navegador.</p>
+        <div class="field">
+          <span class="num-badge">Próxima factura <span id="nextLabel">n.º 8</span></span>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label>Fecha de factura</label>
+            <input type="date" id="fecha" />
+          </div>
+          <div class="field">
+            <label>Periodo del servicio</label>
+            <div class="row">
+              <input type="date" id="periodoDesde" />
+              <input type="date" id="periodoHasta" />
+            </div>
+          </div>
+        </div>
+
+        <h2>Cliente</h2>
+        <div class="field">
+          <label>Nombre o razón social</label>
+          <input id="cliNombre" placeholder="Monica Beatriz Larrosa" list="clientesPrevios" />
+          <datalist id="clientesPrevios"></datalist>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>CIF / NIF</label>
+            <input id="cliCif" placeholder="79255619B" />
+          </div>
+          <div class="field">
+            <label>Código postal</label>
+            <input id="cliCp" placeholder="35500" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Dirección</label>
+          <input id="cliDir" placeholder="Calle Armas Curbelo Nº 45" />
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Email del cliente</label>
+            <input id="cliEmail" type="email" placeholder="cliente@correo.com" />
+          </div>
+          <div class="field">
+            <label>Teléfono / WhatsApp</label>
+            <input id="cliTel" placeholder="34600000000" />
+          </div>
+        </div>
+
+        <h2>Conceptos</h2>
+        <table>
+          <thead>
+            <tr><th>Descripción</th><th style="width:110px">Importe €</th><th style="width:40px"></th></tr>
+          </thead>
+          <tbody id="itemsBody"></tbody>
+        </table>
+        <div class="actions">
+          <button class="btn-ghost" type="button" id="addItem">+ Añadir línea</button>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <div class="field">
+            <label>IGIC %</label>
+            <input id="igic" type="number" min="0" step="0.01" value="0" />
+          </div>
+          <div class="field">
+            <label>Exento</label>
+            <select id="exento">
+              <option value="si" selected>Sí, 0% exento</option>
+              <option value="no">No, aplicar IGIC</option>
+            </select>
+          </div>
+        </div>
+        <div class="totals">
+          <div><span>Subtotal</span><b id="subtotalTxt">0,00 €</b></div>
+          <div><span id="igicLabel">IGIC (0% exento)</span><b id="igicTxt">0,00 €</b></div>
+          <div class="grand"><span>Total</span><span id="totalTxt">0,00 €</span></div>
+        </div>
+
+        <div class="section-gap"></div>
+        <h2>Enviar al cliente</h2>
+        <div class="send-box">
+          <p class="hint">Primero se descarga el PDF. Luego puedes abrir WhatsApp o el correo con el mensaje listo.</p>
+          <div class="field">
+            <label>Mensaje</label>
+            <textarea id="mensaje">Hola, le enviamos la factura de Radio Nueva Moda. Quedamos a su disposición.</textarea>
+          </div>
+          <div class="actions">
+            <button class="btn-gold" type="button" id="btnPdf">Descargar PDF</button>
+            <button class="btn-wa" type="button" id="btnWa">WhatsApp</button>
+            <button class="btn-mail" type="button" id="btnMail">Email</button>
+          </div>
+        </div>
+      </section>
+
+      <aside>
+        <section class="card">
+          <h2>Datos de la emisora</h2>
+          <div class="field"><label>Nombre comercial</label><input id="emNombre" /></div>
+          <div class="field"><label>Emitida por</label><input id="emPersona" /></div>
+          <div class="row">
+            <div class="field"><label>NIT / NIF</label><input id="emNif" /></div>
+            <div class="field"><label>Teléfono</label><input id="emTel" /></div>
+          </div>
+          <div class="field"><label>Dirección</label><input id="emDir" /></div>
+          <div class="field"><label>Email</label><input id="emEmail" /></div>
+          <div class="field"><label>Web</label><input id="emWeb" /></div>
+          <div class="field"><label>IBAN</label><input id="emIban" /></div>
+          <div class="row">
+            <div class="field"><label>Banco</label><input id="emBanco" /></div>
+            <div class="field"><label>Siguiente número</label><input id="nextNum" type="number" min="1" /></div>
+          </div>
+          <div class="actions">
+            <button class="btn-ghost" type="button" id="saveSettings">Guardar datos</button>
+          </div>
+        </section>
+        <div class="section-gap"></div>
+        <section class="card">
+          <h2>Historial</h2>
+          <p class="hint">Pulse una factura para recargarla. La numeración no retrocede al reimprimir.</p>
+          <div class="hist" id="historial"></div>
+          <div class="actions">
+            <button class="btn-ghost" type="button" id="exportJson">Exportar copia</button>
+            <button class="btn-ghost" type="button" id="importJson">Importar</button>
+            <input type="file" id="importFile" accept="application/json" hidden />
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <div class="toast" id="toast"></div>
+
+  <script src="logo.js"></script>
+  <script src="pdf.js"></script>
+  <script src="core.js"></script>
+</body>
+</html>
